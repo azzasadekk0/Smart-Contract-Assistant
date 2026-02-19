@@ -1,0 +1,1 @@
+"""Smart Contract Assistant package."""

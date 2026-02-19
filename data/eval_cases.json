@@ -1,0 +1,72 @@
+[
+  {
+    "question": "Who are the parties in this agreement?",
+    "expected_answer": "The agreement identifies a supplier and a distributor.",
+    "required_terms": ["supplier", "distributor"],
+    "forbidden_terms": ["i do not have enough evidence", "i don't know"],
+    "expected_sources": ["FuseMedicalInc.pdf", "GentechHoldingsInc.pdf"]
+  },
+  {
+    "question": "What is the date of the distributorship agreement?",
+    "expected_answer": "The agreement states an effective or signature date.",
+    "required_terms": ["date"],
+    "forbidden_terms": ["unknown", "not provided"],
+    "expected_sources": ["FuseMedicalInc.pdf"]
+  },
+  {
+    "question": "Is the distributorship exclusive or non-exclusive?",
+    "expected_answer": "The agreement specifies whether the distributorship is exclusive or non-exclusive.",
+    "required_terms": ["exclusive", "non-exclusive"],
+    "forbidden_terms": ["not enough evidence"],
+    "expected_sources": ["FuseMedicalInc.pdf"]
+  },
+  {
+    "question": "What are inactive territories?",
+    "expected_answer": "Inactive territories are locations where the distributor has not sold or supplied products during the initial term.",
+    "required_terms": ["inactive territories", "initial term"],
+    "forbidden_terms": ["cannot answer"],
+    "expected_sources": ["FuseMedicalInc.pdf"]
+  },
+  {
+    "question": "How are products defined in the agreement?",
+    "expected_answer": "Products are defined in the schedule or annex and can include permitted additions.",
+    "required_terms": ["products", "schedule"],
+    "forbidden_terms": ["not mentioned"],
+    "expected_sources": ["FuseMedicalInc.pdf"]
+  },
+  {
+    "question": "How long does the company have to accept or reject an order?",
+    "expected_answer": "Orders must be accepted or rejected within a stated business-day window.",
+    "required_terms": ["business days", "accept", "reject"],
+    "forbidden_terms": ["not enough evidence"],
+    "expected_sources": ["GentechHoldingsInc.pdf"]
+  },
+  {
+    "question": "What is the fulfillment timeline for accepted orders?",
+    "expected_answer": "The contract defines how many business days are allowed to fulfill accepted orders.",
+    "required_terms": ["business days", "fulfilled"],
+    "forbidden_terms": ["unknown"],
+    "expected_sources": ["GentechHoldingsInc.pdf"]
+  },
+  {
+    "question": "What shipment terms are referenced?",
+    "expected_answer": "The agreement references shipment terms such as Incoterms.",
+    "required_terms": ["incoterms"],
+    "forbidden_terms": ["no shipping terms"],
+    "expected_sources": ["GentechHoldingsInc.pdf"]
+  },
+  {
+    "question": "What does the contract say about payment terms?",
+    "expected_answer": "The contract includes obligations around payment terms.",
+    "required_terms": ["payment"],
+    "forbidden_terms": ["cannot determine"],
+    "expected_sources": ["FuseMedicalInc.pdf", "GentechHoldingsInc.pdf"]
+  },
+  {
+    "question": "What does the contract say about duration or term?",
+    "expected_answer": "The contract includes duration or term-related conditions.",
+    "required_terms": ["term"],
+    "forbidden_terms": ["no term"],
+    "expected_sources": ["FuseMedicalInc.pdf", "GentechHoldingsInc.pdf"]
+  }
+]

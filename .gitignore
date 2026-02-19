@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+.venv/
+.venv-win/
+.env
+.gradio/
+data/uploads/
+data/vectorstore/
+logs/
+.tmpdl/
