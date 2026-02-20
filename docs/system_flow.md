@@ -14,7 +14,7 @@ flowchart LR
     I --> J[LLM Answer Generation]
     J --> K[Citations and Response]
 
-    K --> L[Gradio Chat UI]
+    K --> L[Streamlit Chat UI]
     J --> M[Session History Store]
     F --> N[Optional Summarization]
 ```

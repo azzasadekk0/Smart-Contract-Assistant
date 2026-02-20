@@ -12,7 +12,7 @@ def build_embeddings(settings: AppSettings) -> Any:
         from langchain_openai import OpenAIEmbeddings
 
         return OpenAIEmbeddings(
-            model="text-embedding-3-small",
+            model=settings.embedding_model_name,
             api_key=settings.openai_api_key,
         )
 

@@ -1,7 +1,5 @@
 # Smart Contract Summary and Q&A Assistant
 
-This project implements the specification in `Smart_Contract_Assistant_Spec.docx (1).pdf`.
-
 ## Implemented Requirements
 
 - Upload and ingestion of PDF/DOCX contract documents.
@@ -106,6 +104,6 @@ Evaluation case fields (JSON):
 - `forbidden_terms` (optional list of phrases that should not appear)
 
 ## Notes
-- Default configuration uses local HuggingFace LLM + sentence-transformer embeddings.
-- For OpenAI, set `LLM_PROVIDER=openai`, `EMBEDDING_PROVIDER=openai`, and `OPENAI_API_KEY` in `.env`.
-- Security requirement is handled by local processing and storage only.
+- Default configuration uses OpenAI (`LLM_PROVIDER=openai`, `EMBEDDING_PROVIDER=openai`).
+- For local HuggingFace, set `LLM_PROVIDER=huggingface` and provide `HF_MODEL_NAME`; for local embeddings set `EMBEDDING_PROVIDER=sentence_transformers` and `EMBEDDING_MODEL_NAME`.
+- Data is stored locally in your configured vector store; if OpenAI providers are enabled, prompts/chunks are sent to OpenAI APIs.

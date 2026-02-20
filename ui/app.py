@@ -55,7 +55,7 @@ def chat_with_assistant(message: str, chat_history: list[dict[str, str]], sessio
                     continue
                 seen.add(citation)
                 unique_citations.append(citation)
-            source_text = ", ".join(unique_citations[:10])
+            source_text = ", ".join(unique_citations[:3])
             answer_text += f"\n\nSources: {source_text}"
 
         updated = chat_history + [
@@ -149,16 +149,28 @@ def parse_evaluation_output(eval_output: str) -> tuple[str, str, list[tuple[str,
 
 def build_css() -> str:
     vars_block = """
-    --bg: #000000;
-    --panel: #111111;
-    --input: #111111;
-    --border: #ffffff;
-    --text: #ffffff;
-    --muted: #cfcfcf;
+    --bg: #f3f8f4;
+    --panel: #8EB69B;
+    --panel-soft: #8EB69B;
+    --input: #e9f3ec;
+    --border: #235347;
+    --text: #051F20;
+    --muted: #235347;
+    --accent: #235347;
+    --accent-strong: #2F6B5D;
+    --accent-soft: #b7d0bf;
+    --assistant-bubble: #e9f3ec;
+    --user-bubble: #e9f3ec;
+    --shadow-sm: 0 8px 20px rgba(2, 8, 23, 0.05);
+    --shadow-md: 0 14px 35px rgba(2, 8, 23, 0.08);
+    --radius-lg: 12px;
+    --radius-md: 12px;
     """
 
     css_template = """
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@700;800&display=swap');
+
 :root {
   __VARS_BLOCK__
 }
@@ -168,6 +180,7 @@ def build_css() -> str:
 [data-testid="stMain"] {
   background: var(--bg) !important;
   color: var(--text) !important;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
 }
 
 [data-testid="stHeader"] {
@@ -176,10 +189,28 @@ def build_css() -> str:
 
 section.main > div {
   background: var(--bg) !important;
+  padding-top: 1.15rem !important;
 }
 
 h1, h2, h3, h4, h5, h6, p, label, span, div {
   color: var(--text);
+}
+
+h1, h2, h3, h4 {
+  font-family: "Manrope", "Inter", sans-serif !important;
+  letter-spacing: -0.015em;
+}
+
+h1 {
+  font-size: clamp(2rem, 4vw, 2.8rem) !important;
+  font-weight: 800 !important;
+  margin-bottom: 0.4rem !important;
+}
+
+[data-testid="stCaptionContainer"] p {
+  color: var(--muted) !important;
+  font-size: 0.98rem !important;
+  font-weight: 500 !important;
 }
 
 [data-testid="stVerticalBlock"] > [data-testid="stVerticalBlockBorderWrapper"] {
@@ -189,8 +220,10 @@ h1, h2, h3, h4, h5, h6, p, label, span, div {
 
 [data-testid="stVerticalBlockBorderWrapper"] {
   border: 1px solid var(--border) !important;
-  border-radius: 10px !important;
+  border-radius: var(--radius-lg) !important;
   background: var(--panel) !important;
+  box-shadow: var(--shadow-sm) !important;
+  padding: 2px !important;
 }
 
 [data-testid="stChatMessage"] {
@@ -209,39 +242,42 @@ h1, h2, h3, h4, h5, h6, p, label, span, div {
 
 [data-testid="stChatMessageAvatarUser"],
 [data-testid="stChatMessageAvatarAssistant"] {
-  background: #ffffff !important;
-  border: 1px solid #000000 !important;
-  border-radius: 8px !important;
-  color: #000000 !important;
+  background: var(--accent-soft) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 999px !important;
+  color: var(--accent-strong) !important;
 }
 
 [data-testid^="stChatMessageAvatar"] {
-  background: #ffffff !important;
-  border: 1px solid #000000 !important;
-  border-radius: 8px !important;
-  color: #000000 !important;
+  background: var(--accent-soft) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 999px !important;
+  color: var(--accent-strong) !important;
   font-weight: 700 !important;
 }
 
 [data-testid="stChatMessageAvatarUser"] *,
 [data-testid="stChatMessageAvatarAssistant"] * {
-  color: #000000 !important;
-  fill: #000000 !important;
-  stroke: #000000 !important;
+  color: var(--accent-strong) !important;
+  fill: var(--accent-strong) !important;
+  stroke: var(--accent-strong) !important;
 }
 
 [data-testid^="stChatMessageAvatar"] * {
-  color: #000000 !important;
-  fill: #000000 !important;
-  stroke: #000000 !important;
+  color: var(--accent-strong) !important;
+  fill: var(--accent-strong) !important;
+  stroke: var(--accent-strong) !important;
 }
 
 [data-testid="stTextInput"] input,
 [data-testid="stTextArea"] textarea {
   background: var(--input) !important;
   color: var(--text) !important;
-  border: 1px solid var(--border) !important;
+  border: 1.5px solid var(--border) !important;
+  border-radius: var(--radius-md) !important;
   -webkit-text-fill-color: var(--text) !important;
+  padding: 0.72rem 0.88rem !important;
+  min-height: 46px !important;
 }
 
 [data-testid="stTextInput"] input::placeholder,
@@ -272,7 +308,8 @@ input[disabled] {
 div[data-baseweb="input"] > div,
 div[data-baseweb="select"] > div {
   background: var(--input) !important;
-  border: 1px solid var(--border) !important;
+  border: 1.5px solid var(--border) !important;
+  border-radius: var(--radius-md) !important;
   box-shadow: none !important;
 }
 
@@ -285,17 +322,24 @@ div[data-baseweb="select"] * {
 
 div[data-baseweb="input"] > div:focus-within,
 div[data-baseweb="select"] > div:focus-within {
-  border: 1px solid var(--border) !important;
-  box-shadow: 0 0 0 1px var(--border) !important;
+  border: 1.5px solid var(--accent) !important;
+  box-shadow: 0 0 0 3px rgba(248, 187, 208, 0.35) !important;
 }
 
 [data-baseweb="textarea"] {
-  border: 1px solid var(--border) !important;
+  border: 1.5px solid var(--border) !important;
+  border-radius: var(--radius-md) !important;
 }
 
 [data-testid="stFileUploaderDropzone"] {
   background: var(--input) !important;
-  border: 1px solid var(--border) !important;
+  border: 1.5px dashed var(--border) !important;
+  border-radius: var(--radius-lg) !important;
+  padding: 0.45rem !important;
+}
+
+[data-testid="stFileUploaderDropzone"] > div {
+  background: var(--input) !important;
 }
 
 [data-testid="stFileUploaderDropzone"] * {
@@ -303,25 +347,77 @@ div[data-baseweb="select"] > div:focus-within {
   fill: var(--text) !important;
 }
 
+[data-testid="stFileUploaderDropzone"] svg {
+  display: none !important;
+}
+
+[data-testid="stFileUploaderDropzone"] [data-testid="stFileUploaderDropzoneInstructions"] > div:first-child {
+  display: none !important;
+}
+
+[data-testid="stFileUploaderDropzone"] [data-testid="stFileUploaderDropzoneInstructions"] {
+  padding-left: 0 !important;
+}
+
+[data-testid="stFileUploaderDropzone"] button,
+[data-testid="stFileUploaderDropzone"] [data-baseweb="button"] {
+  background: var(--accent) !important;
+  border: 1px solid var(--accent) !important;
+  color: #f4fffa !important;
+  border-radius: 12px !important;
+  font-weight: 600 !important;
+  box-shadow: 0 6px 16px rgba(229, 115, 115, 0.18) !important;
+}
+
+[data-testid="stFileUploaderDropzone"] button:hover,
+[data-testid="stFileUploaderDropzone"] [data-baseweb="button"]:hover {
+  background: var(--accent-strong) !important;
+  border-color: var(--accent-strong) !important;
+}
+
+[data-testid="stFileUploaderDropzone"] button *,
+[data-testid="stFileUploaderDropzone"] [data-baseweb="button"] * {
+  color: #f4fffa !important;
+  -webkit-text-fill-color: #f4fffa !important;
+  fill: #f4fffa !important;
+}
+
 [data-testid="stFileUploaderFileData"] * {
   color: var(--text) !important;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill {
+  -webkit-text-fill-color: var(--text) !important;
+  box-shadow: 0 0 0px 1000px var(--input) inset !important;
 }
 
 .chat-row {
   display: flex;
   align-items: flex-start;
   gap: 10px;
-  margin-bottom: 12px;
+  margin-bottom: 14px;
+}
+
+.chat-row.user-row {
+  flex-direction: row-reverse;
+  justify-content: flex-start;
+}
+
+.chat-row.assistant-row {
+  justify-content: flex-start;
 }
 
 .chat-avatar {
-  width: 34px;
-  min-width: 34px;
-  height: 34px;
+  width: 36px;
+  min-width: 36px;
+  height: 36px;
   border-radius: 999px;
-  border: 2px solid #000000;
-  background: #ffffff;
-  color: #000000;
+  border: 1px solid var(--border);
+  background: var(--accent-soft);
+  color: var(--accent-strong);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -333,7 +429,7 @@ div[data-baseweb="select"] > div:focus-within {
 .chat-avatar svg {
   width: 18px;
   height: 18px;
-  stroke: #000000;
+  stroke: var(--accent-strong);
   fill: none;
   stroke-width: 2;
   stroke-linecap: round;
@@ -341,23 +437,39 @@ div[data-baseweb="select"] > div:focus-within {
 }
 
 .chat-bubble {
-  flex: 1;
-  background: #ffffff;
-  border: 1px solid #000000;
-  border-radius: 12px;
-  color: #000000 !important;
-  padding: 10px 12px;
+  max-width: 84%;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  color: var(--text) !important;
+  padding: 12px 16px;
+  box-shadow: var(--shadow-sm);
   white-space: normal;
   word-break: break-word;
   overflow-wrap: anywhere;
+  transition: transform 0.18s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.chat-row.user-row .chat-bubble {
+  background: var(--user-bubble);
+}
+
+.chat-row.assistant-row .chat-bubble {
+  background: var(--assistant-bubble);
+}
+
+.chat-bubble:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
 }
 
 .chat-bubble * {
-  color: #000000 !important;
+  color: var(--text) !important;
 }
 
 .chat-text {
-  color: #000000 !important;
+  color: var(--text) !important;
+  font-size: 0.98rem;
+  line-height: 1.58;
   margin: 0;
   white-space: pre-wrap;
   word-break: break-word;
@@ -367,50 +479,82 @@ div[data-baseweb="select"] > div:focus-within {
 [data-testid="stMarkdownContainer"] .chat-bubble,
 [data-testid="stMarkdownContainer"] .chat-bubble *,
 [data-testid="stMarkdownContainer"] .chat-bubble .chat-text {
-  color: #000000 !important;
-  -webkit-text-fill-color: #000000 !important;
+  color: var(--text) !important;
+  -webkit-text-fill-color: var(--text) !important;
+}
+
+.chat-sources {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.source-tag {
+  display: inline-flex;
+  align-items: center;
+  background: #dbe9df;
+  color: #235347 !important;
+  border: 1px solid #8EB69B;
+  border-radius: 999px;
+  padding: 3px 9px;
+  font-size: 0.74rem;
+  line-height: 1.1;
+  font-weight: 500;
 }
 
 .vertical-divider {
   border-left: 2px solid var(--border);
-  min-height: 1400px;
-  margin: 0 auto;
+  height: clamp(1320px, 175vh, 1850px);
+  margin: 6px auto 0 auto;
+  opacity: 0.8;
 }
 
 .stButton > button {
-  background: #ffffff !important;
-  color: #000000 !important;
-  border: 1px solid #000000 !important;
-  border-radius: 8px !important;
+  background: var(--accent) !important;
+  color: #f4fffa !important;
+  border: 1px solid var(--accent) !important;
+  border-radius: var(--radius-md) !important;
+  font-weight: 600 !important;
+  padding: 0.62rem 1rem !important;
+  box-shadow: 0 8px 20px rgba(229, 115, 115, 0.16) !important;
+  transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease !important;
   opacity: 1 !important;
 }
 
 .stButton > button span,
 .stButton > button p,
 .stButton > button div {
-  color: #000000 !important;
-  -webkit-text-fill-color: #000000 !important;
+  color: #f4fffa !important;
+  -webkit-text-fill-color: #f4fffa !important;
 }
 
 .stButton > button:hover {
-  background: #e8e8e8 !important;
+  background: var(--accent-strong) !important;
+  border-color: var(--accent-strong) !important;
+  transform: translateY(-1px);
+  box-shadow: 0 12px 24px rgba(229, 115, 115, 0.24) !important;
 }
 
 div[data-testid="stFormSubmitButton"] > button {
-  background: #ffffff !important;
-  color: #000000 !important;
-  border: 1px solid #000000 !important;
-  border-radius: 8px !important;
+  background: var(--accent) !important;
+  color: #f4fffa !important;
+  border: 1px solid var(--accent) !important;
+  border-radius: var(--radius-md) !important;
+  font-weight: 600 !important;
   min-height: 42px !important;
   margin-top: 0 !important;
+  padding: 0.62rem 1rem !important;
+  box-shadow: 0 8px 20px rgba(229, 115, 115, 0.16) !important;
+  transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease !important;
   opacity: 1 !important;
 }
 
 div[data-testid="stFormSubmitButton"] > button span,
 div[data-testid="stFormSubmitButton"] > button p,
 div[data-testid="stFormSubmitButton"] > button div {
-  color: #000000 !important;
-  -webkit-text-fill-color: #000000 !important;
+  color: #f4fffa !important;
+  -webkit-text-fill-color: #f4fffa !important;
 }
 
 div[data-testid="stForm"] [data-testid="stHorizontalBlock"] {
@@ -418,39 +562,99 @@ div[data-testid="stForm"] [data-testid="stHorizontalBlock"] {
 }
 
 .stButton > button:disabled {
-  background: #f0f0f0 !important;
-  color: #4a4a4a !important;
-  border: 1px solid #b5b5b5 !important;
+  background: #7fa795 !important;
+  color: #e8f1ec !important;
+  border: 1px solid #6f9988 !important;
+  box-shadow: none !important;
   opacity: 1 !important;
 }
 
 .stButton > button:disabled span,
 .stButton > button:disabled p,
 .stButton > button:disabled div {
-  color: #4a4a4a !important;
-  -webkit-text-fill-color: #4a4a4a !important;
+  color: #e8f1ec !important;
+  -webkit-text-fill-color: #e8f1ec !important;
 }
 
 .panel-title {
   font-weight: 800 !important;
-  font-size: 1.9rem !important;
-  margin-bottom: 8px;
+  font-size: clamp(1.3rem, 2.1vw, 1.8rem) !important;
+  margin-bottom: 10px;
   line-height: 1.2;
+  color: var(--text) !important;
+  letter-spacing: -0.01em;
 }
 
 .subsection-title {
   font-weight: 800 !important;
-  font-size: 1.9rem !important;
-  margin: 14px 0 10px 0;
+  font-size: clamp(1.2rem, 2vw, 1.65rem) !important;
+  margin: 16px 0 10px 0;
+  line-height: 1.25;
+  color: var(--text) !important;
 }
 
 .muted-text {
   color: var(--muted) !important;
   font-style: italic;
+  font-size: 0.96rem !important;
+}
+
+[data-testid="stAlert"] {
+  border: 1px solid var(--border) !important;
+  background: #dce9e0 !important;
+  color: var(--text) !important;
+}
+
+[data-testid="stAlert"] * {
+  color: var(--text) !important;
+}
+
+[data-testid="stMarkdownContainer"] code {
+  background: var(--assistant-bubble) !important;
+  color: var(--text) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 10px !important;
+  padding: 3px 8px !important;
+  font-size: 0.82rem !important;
+  -webkit-text-fill-color: var(--text) !important;
+}
+
+[data-testid="stMarkdownContainer"] pre {
+  background: var(--assistant-bubble) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 12px !important;
+  padding: 10px 12px !important;
+}
+
+[data-testid="stMarkdownContainer"] pre code {
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
 }
 
 a {
-  color: var(--text) !important;
+  color: var(--accent) !important;
+  text-underline-offset: 2px;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #dce9e0;
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #8EB69B;
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #7fa795;
 }
 </style>
 """
@@ -475,6 +679,15 @@ def render_chat_history(chat_history: list[dict[str, str]]) -> None:
     for msg in chat_history:
         role = msg.get("role", "assistant")
         content = msg.get("content", "")
+        message_body = content
+        source_tags_html = ""
+        if "\n\nSources:" in content:
+            message_body, raw_sources = content.split("\n\nSources:", maxsplit=1)
+            sources = [item.strip() for item in raw_sources.split(",") if item.strip()]
+            if sources:
+                badges = "".join(f'<span class="source-tag">{escape(source)}</span>' for source in sources)
+                source_tags_html = f'<div class="chat-sources">{badges}</div>'
+
         avatar_svg = (
             '<svg viewBox="0 0 24 24" aria-hidden="true">'
             '<circle cx="12" cy="8" r="4"></circle>'
@@ -489,12 +702,16 @@ def render_chat_history(chat_history: list[dict[str, str]]) -> None:
             '<path d="M12 4v3"></path>'
             "</svg>"
         )
-        safe_content = escape(content.rstrip())
+        safe_content = escape(message_body.rstrip())
+        row_class = "user-row" if role == "user" else "assistant-row"
         st.markdown(
             f"""
-<div class="chat-row">
+<div class="chat-row {row_class}">
   <div class="chat-avatar">{avatar_svg}</div>
-  <div class="chat-bubble"><p class="chat-text">{safe_content}</p></div>
+  <div class="chat-bubble">
+    <p class="chat-text">{safe_content}</p>
+    {source_tags_html}
+  </div>
 </div>
 """,
             unsafe_allow_html=True,
@@ -506,7 +723,6 @@ def main() -> None:
     init_state()
 
     st.title("Smart Contract Assistant")
-    st.caption("Chat on the left. Upload, summarize, and evaluate on the right.")
 
     st.markdown(build_css(), unsafe_allow_html=True)
 

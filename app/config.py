@@ -11,13 +11,13 @@ class AppSettings(BaseSettings):
         extra="ignore",
     )
 
-    llm_provider: str = Field(default="huggingface")
+    llm_provider: str = Field(default="openai")
     openai_api_key: str | None = Field(default=None)
     openai_chat_model: str = Field(default="gpt-4o-mini")
     hf_model_name: str = Field(default="google/flan-t5-base")
 
-    embedding_provider: str = Field(default="sentence_transformers")
-    embedding_model_name: str = Field(default="sentence-transformers/all-MiniLM-L6-v2")
+    embedding_provider: str = Field(default="openai")
+    embedding_model_name: str = Field(default="text-embedding-3-small")
 
     vector_backend: str = Field(default="chroma")
     vector_store_dir: str = Field(default="data/vectorstore")
@@ -25,6 +25,7 @@ class AppSettings(BaseSettings):
     chunk_size: int = Field(default=900)
     chunk_overlap: int = Field(default=120)
     top_k: int = Field(default=4)
+    citation_top_n: int = Field(default=3)
 
     guardrail_min_relevance: float = Field(default=0.2)
     max_query_chars: int = Field(default=2000)

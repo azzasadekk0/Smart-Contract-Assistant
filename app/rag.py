@@ -130,7 +130,8 @@ class RAGService:
 
         unique_retrieved: list[tuple[Any, float]] = []
         seen_doc_keys: set[tuple[str, int | None, int]] = set()
-        for doc, score in retrieved:
+        ranked_retrieved = sorted(retrieved, key=lambda item: float(item[1]), reverse=True)
+        for doc, score in ranked_retrieved:
             source = self._normalize_source_name(str(doc.metadata.get("source", "unknown")))
             chunk_id = int(doc.metadata.get("chunk_id", 0)) or None
             key = (source, chunk_id, hash(doc.page_content))
@@ -154,7 +155,8 @@ class RAGService:
                 )
             )
 
-        citations = citations[:10]
+        citation_limit = max(1, min(int(self.settings.citation_top_n), 3))
+        citations = citations[:citation_limit]
 
         prompt = (
             "You are a smart contract assistant. "
